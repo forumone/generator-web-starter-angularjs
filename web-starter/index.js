@@ -30,6 +30,16 @@ module.exports = generators.Base.extend({
         editor.loadNpmTasks('grunt-contrib-concat');
         this.options.addDevDependency('grunt-contrib-concat', '^1.0.0');
 
+        var editor = this.options.getPlugin('grunt').getGruntTask('htmlbuild');
+        editor.insertConfig('dev', this.fs.read(this.templatePath('tasks/config/htmlbuild.js')));
+        editor.loadNpmTasks('grunt-html-build');
+        this.options.addDevDependency('grunt-html-build', '^0.5.2');
+
+        var editor = this.options.getPlugin('grunt').getGruntTask('htmlmin');
+        editor.insertConfig('options', this.fs.read(this.templatePath('tasks/config/htmlmin.js')));
+        editor.loadNpmTasks('grunt-contrib-htmlmin');
+        this.options.addDevDependency('grunt-contrib-htmlmin', '^1.4.0');
+
         var editor = this.options.getPlugin('grunt').getGruntTask('ngAnnotate');
         editor.insertConfig('options', this.fs.read(this.templatePath('tasks/config/ng-annotate-options.js')));
         editor.insertConfig('app', this.fs.read(this.templatePath('tasks/config/ng-annotate.js')));
@@ -40,6 +50,12 @@ module.exports = generators.Base.extend({
         editor.insertConfig('ngtemplates', this.fs.read(this.templatePath('tasks/config/ngtemplates.js')));
         editor.loadNpmTasks('grunt-angular-templates');
         this.options.addDevDependency('grunt-angular-templates', '^1.0.3');
+
+        var editor = this.options.getPlugin('grunt').getGruntTask('sync');
+        editor.insertConfig('build', this.fs.read(this.templatePath('tasks/config/sync-build.js')));
+        editor.insertConfig('source', this.fs.read(this.templatePath('tasks/config/sync-source.js')));
+        editor.loadNpmTasks('grunt-sync');
+        this.options.addDevDependency('grunt-sync', '^0.5.2');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('uglify');
         editor.insertConfig('js', this.fs.read(this.templatePath('tasks/config/uglify.js')));
