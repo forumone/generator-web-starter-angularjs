@@ -16,6 +16,42 @@ module.exports = generators.Base.extend({
       ygp(this);
     },
   },
+  configuring : {
+    addGruntTasks : function() {
+      var done = this.async();
+      if(this.options.getPlugin('grunt')) {
+        var editor = this.options.getPlugin('grunt').getGruntTask('bower');
+        editor.insertConfig('install', this.fs.read(this.templatePath('tasks/config/bower.js')));
+        editor.loadNpmTasks('grunt-bower-task');
+        this.options.addDevDependency('grunt-bower-task', '^0.4.0');
+
+        var editor = this.options.getPlugin('grunt').getGruntTask('concat');
+        editor.insertConfig('js', this.fs.read(this.templatePath('tasks/config/concat.js')));
+        editor.loadNpmTasks('grunt-contrib-concat');
+        this.options.addDevDependency('grunt-contrib-concat', '^1.0.0');
+
+        var editor = this.options.getPlugin('grunt').getGruntTask('ngAnnotate');
+        editor.insertConfig('options', this.fs.read(this.templatePath('tasks/config/ng-annotate-options.js')));
+        editor.insertConfig('app', this.fs.read(this.templatePath('tasks/config/ng-annotate.js')));
+        editor.loadNpmTasks('grunt-ng-annotate');
+        this.options.addDevDependency('grunt-ng-annotate', '^2.0.2');
+
+        var editor = this.options.getPlugin('grunt').getGruntTask('ngtemplates');
+        editor.insertConfig('ngtemplates', this.fs.read(this.templatePath('tasks/config/ngtemplates.js')));
+        editor.loadNpmTasks('grunt-angular-templates');
+        this.options.addDevDependency('grunt-angular-templates', '^1.0.3');
+
+        var editor = this.options.getPlugin('grunt').getGruntTask('uglify');
+        editor.insertConfig('js', this.fs.read(this.templatePath('tasks/config/uglify.js')));
+        editor.loadNpmTasks('grunt-contrib-uglify');
+        this.options.addDevDependency('grunt-contrib-uglify', '^1.0.1');
+      }
+      else {
+        console.log('INFO unable to write grunt tasks for AngularJs because Grunt plugin not selected for this project');
+      }
+      done();
+    }
+  },
   writing : {
     grunt : function() {
     }
