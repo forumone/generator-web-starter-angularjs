@@ -7,6 +7,7 @@ var generators = require('yeoman-generator'),
   glob = Promise.promisify(require('glob')),
   http = require('http'),
   fs = require('fs'),
+  yosay = require('yosay'),
   ygp = require('yeoman-generator-bluebird');
 
 
@@ -33,7 +34,7 @@ module.exports = generators.Base.extend({
         var editor = this.options.getPlugin('grunt').getGruntTask('htmlbuild');
         editor.insertConfig('dev', this.fs.read(this.templatePath('tasks/config/htmlbuild.js')));
         editor.loadNpmTasks('grunt-html-build');
-        this.options.addDevDependency('grunt-html-build', '^0.5.2');
+        this.options.addDevDependency('grunt-html-build', '^0.6.0');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('htmlmin');
         editor.insertConfig('options', this.fs.read(this.templatePath('tasks/config/htmlmin.js')));
@@ -45,6 +46,13 @@ module.exports = generators.Base.extend({
         editor.insertConfig('app', this.fs.read(this.templatePath('tasks/config/ng-annotate.js')));
         editor.loadNpmTasks('grunt-ng-annotate');
         this.options.addDevDependency('grunt-ng-annotate', '^2.0.2');
+
+        var editor = this.options.getPlugin('grunt').getGruntTask('ngconstant');
+        editor.insertConfig('development', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
+        editor.insertConfig('staging', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
+        editor.insertConfig('production', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
+        editor.loadNpmTasks('grunt-ng-constant');
+        this.options.addDevDependency('grunt-ng-constant', '^2.0.1');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('ngtemplates');
         editor.insertConfig('ngtemplates', this.fs.read(this.templatePath('tasks/config/ngtemplates.js')));
@@ -70,6 +78,27 @@ module.exports = generators.Base.extend({
   },
   writing : {
     grunt : function() {
+      this.fs.copy(
+          this.templatePath('tasks/register/build.js'),
+          this.destinationPath('tasks/register/build.js')
+        );
+      this.fs.copy(
+          this.templatePath('tasks/register/compileAssets.js'),
+          this.destinationPath('tasks/register/compileAssets.js')
+        );
+      this.fs.copy(
+          this.templatePath('tasks/register/compileScripts.js'),
+          this.destinationPath('tasks/register/compileScripts.js')
+        );
+      this.fs.copy(
+          this.templatePath('tasks/register/default.js'),
+          this.destinationPath('tasks/register/default.js')
+        );
+    }
+  }
+  end : {
+    ncu : function() {
+      console.log(yosay("Don't forget to run 'ncu -u' to update your package.json"));
     }
   }
 });
