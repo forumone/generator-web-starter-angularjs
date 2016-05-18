@@ -16,6 +16,10 @@ module.exports = generators.Base.extend({
     async : function() {
       ygp(this);
     },
+    platform : function() {
+      // Set the platform
+      this.options.parent.answers.platform = 'angularjs';
+    }
   },
   configuring : {
     addGruntTasks : function() {
@@ -27,17 +31,17 @@ module.exports = generators.Base.extend({
         this.options.addDevDependency('grunt-bower-task', '^0.4.0');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('concat');
-        editor.insertConfig('js', this.fs.read(this.templatePath('tasks/config/concat.js')));
+        editor.insertConfig('concat', this.fs.read(this.templatePath('tasks/config/concat.js')));
         editor.loadNpmTasks('grunt-contrib-concat');
         this.options.addDevDependency('grunt-contrib-concat', '^1.0.0');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('htmlbuild');
-        editor.insertConfig('dev', this.fs.read(this.templatePath('tasks/config/htmlbuild.js')));
+        editor.insertConfig('htmlbuild.dev', this.fs.read(this.templatePath('tasks/config/htmlbuild.js')));
         editor.loadNpmTasks('grunt-html-build');
         this.options.addDevDependency('grunt-html-build', '^0.6.0');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('htmlmin');
-        editor.insertConfig('options', this.fs.read(this.templatePath('tasks/config/htmlmin.js')));
+        editor.insertConfig('htmlmin.options', this.fs.read(this.templatePath('tasks/config/htmlmin.js')));
         editor.loadNpmTasks('grunt-contrib-htmlmin');
         this.options.addDevDependency('grunt-contrib-htmlmin', '^1.4.0');
 
