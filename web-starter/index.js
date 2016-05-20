@@ -1,5 +1,5 @@
 'use strict';
-var generators = require('yeoman-generator'), 
+var generators = require('yeoman-generator'),
   _ = require('lodash'),
   Promise = require('bluebird'),
   rp = require('request-promise'),
@@ -75,7 +75,7 @@ module.exports = generators.Base.extend({
         this.options.addDevDependency('grunt-contrib-uglify', '^1.0.1');
       }
       else {
-        console.log('INFO unable to write grunt tasks for AngularJs because Grunt plugin not selected for this project');
+        this.log('INFO unable to write grunt tasks for AngularJs because Grunt plugin not selected for this project');
       }
       done();
     }
@@ -98,11 +98,15 @@ module.exports = generators.Base.extend({
           this.templatePath('tasks/register/default.js'),
           this.destinationPath('tasks/register/default.js')
         );
+      this.fs.copy(
+          this.templatePath('tasks/pipeline.js'),
+          this.destinationPath('tasks/pipeline.js')
+        );
     }
   },
   end : {
     ncu : function() {
-      console.log(yosay("Run 'ncu -u' to update your package.json"));
+      this.log(yosay("Run 'ncu -u' to update your package.json"));
     }
   }
 });
