@@ -26,7 +26,7 @@ module.exports = generators.Base.extend({
       var done = this.async();
       if (typeof this.options.getPlugin === "function" && this.options.getPlugin('grunt')) {
         var editor = this.options.getPlugin('grunt').getGruntTask('bower');
-        editor.insertConfig('install', this.fs.read(this.templatePath('tasks/config/bower.js')));
+        editor.insertConfig('bower.install', this.fs.read(this.templatePath('tasks/config/bower.js')));
         editor.loadNpmTasks('grunt-bower-task');
         this.options.addDevDependency('grunt-bower-task', '^0.4.0');
 
@@ -97,6 +97,11 @@ module.exports = generators.Base.extend({
       this.fs.copy(
           this.templatePath('tasks/register/default.js'),
           this.destinationPath('tasks/register/default.js')
+        );
+      this.fs.copyTpl(
+          this.templatePath('bower.json'),
+          this.destinationPath('bower.json'),
+          this.options.parent.answers
         );
       this.fs.copy(
           this.templatePath('tasks/pipeline.js'),
