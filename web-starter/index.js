@@ -64,8 +64,8 @@ module.exports = generators.Base.extend({
         this.options.addDevDependency('grunt-angular-templates', '^1.0.3');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('sync');
-        editor.insertConfig('build', this.fs.read(this.templatePath('tasks/config/sync-build.js')));
-        editor.insertConfig('source', this.fs.read(this.templatePath('tasks/config/sync-source.js')));
+        editor.insertConfig('sync.build', this.fs.read(this.templatePath('tasks/config/sync-build.js')));
+        editor.insertConfig('sync.source', this.fs.read(this.templatePath('tasks/config/sync-source.js')));
         editor.loadNpmTasks('grunt-sync');
         this.options.addDevDependency('grunt-sync', '^0.5.2');
 
