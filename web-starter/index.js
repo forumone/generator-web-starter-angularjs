@@ -116,10 +116,20 @@ module.exports = generators.Base.extend({
           task : 'sync:build',
           priority : 2
         }]);
-        this.fs.copy(
-            this.templatePath('tasks/register/compileScripts.js'),
-            this.destinationPath('tasks/register/compileScripts.js')
-          );
+        var gruntEditor = this.options.getPlugin('grunt').registerTask('compileScripts', [{
+          task : '\'ngconstant:\' \+ env',
+          priority : 1
+        },
+        {
+          task : 'ngtemplates',
+          priority : 2
+        },
+        {
+          task : 'ngAnnotate',
+          priority : 2
+        }]);
+        gruntEditor.prependJavaScript("var env = process.env.NODE_ENV || 'development';");
+
         this.fs.copy(
             this.templatePath('tasks/pipeline.js'),
             this.destinationPath('tasks/pipeline.js')
