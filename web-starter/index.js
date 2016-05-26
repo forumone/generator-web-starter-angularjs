@@ -82,31 +82,65 @@ module.exports = generators.Base.extend({
   },
   writing : {
     grunt : function() {
-      this.fs.copy(
-          this.templatePath('tasks/register/build.js'),
-          this.destinationPath('tasks/register/build.js')
+      var done = this.async();
+      if (typeof this.options.getPlugin === "function" && this.options.getPlugin('grunt')) {
+        this.options.getPlugin('grunt').registerTask('default', [{
+          task : 'build',
+          priority : 1
+        },
+        {
+          task : 'connect',
+          priority : 2
+        },
+        {
+          task : 'watch',
+          priority : 2
+        }]);
+        this.options.getPlugin('grunt').registerTask('build', [{
+          task : 'bower',
+          priority : 1
+        },
+        {
+          task : 'compileAssets',
+          priority : 2
+        },
+        {
+          task : 'htmlbuild',
+          priority : 2
+        }]);
+        this.options.getPlugin('grunt').registerTask('compileAssets', [{
+          task : 'sync:source',
+          priority : 1
+        },
+        {
+          task : 'sync:build',
+          priority : 2
+        }]);
+        var gruntEditor = this.options.getPlugin('grunt').registerTask('compileScripts', [{
+          task : '\'ngconstant:\' \+ env',
+          priority : 1
+        },
+        {
+          task : 'ngtemplates',
+          priority : 2
+        },
+        {
+          task : 'ngAnnotate',
+          priority : 2
+        }]);
+        gruntEditor.prependJavaScript("var env = process.env.NODE_ENV || 'development';");
+
+        this.fs.copy(
+            this.templatePath('tasks/pipeline.js'),
+            this.destinationPath('tasks/pipeline.js')
         );
-      this.fs.copy(
-          this.templatePath('tasks/register/compileAssets.js'),
-          this.destinationPath('tasks/register/compileAssets.js')
-        );
-      this.fs.copy(
-          this.templatePath('tasks/register/compileScripts.js'),
-          this.destinationPath('tasks/register/compileScripts.js')
-        );
-      this.fs.copy(
-          this.templatePath('tasks/register/default.js'),
-          this.destinationPath('tasks/register/default.js')
-        );
+      }
       this.fs.copyTpl(
           this.templatePath('bower.json'),
           this.destinationPath('bower.json'),
           this.options.parent.answers
         );
-      this.fs.copy(
-          this.templatePath('tasks/pipeline.js'),
-          this.destinationPath('tasks/pipeline.js')
-        );
+      done();
     }
   },
   end : {
