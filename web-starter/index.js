@@ -94,7 +94,7 @@ module.exports = generators.Base.extend({
         },
         {
           task : 'watch',
-          priority : 2
+          priority : 3
         }]);
         this.options.getPlugin('grunt').registerTask('build', [{
           task : 'bower',
@@ -106,7 +106,7 @@ module.exports = generators.Base.extend({
         },
         {
           task : 'htmlbuild',
-          priority : 2
+          priority : 3
         }]);
         this.options.getPlugin('grunt').registerTask('compileAssets', [{
           task : 'sync:source',
@@ -117,17 +117,14 @@ module.exports = generators.Base.extend({
           priority : 2
         }]);
         var gruntEditor = this.options.getPlugin('grunt').registerTask('compileScripts', [{
-          task : '\'ngconstant:\' \+ env',
-          priority : 1
-        },
-        {
           task : 'ngtemplates',
-          priority : 2
+          priority : 1
         },
         {
           task : 'ngAnnotate',
           priority : 2
         }]);
+        // useful if you want to add ngconstant
         gruntEditor.prependJavaScript("var env = process.env.NODE_ENV || 'development';");
 
         this.fs.copy(
