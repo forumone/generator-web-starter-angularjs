@@ -134,11 +134,14 @@ module.exports = generators.Base.extend({
             this.destinationPath('tasks/pipeline.js')
         );
       }
-      this.fs.copyTpl(
-          this.templatePath('bower.json'),
-          this.destinationPath('bower.json'),
-          this.options.parent.answers
-        );
+      var files = ['bower.json', 'templates/index.html', 'src/js/states/home/index.html', 'src/js/states/home/index.js'];
+      _.map(files, function(f) {
+        this.fs.copyTpl(
+            this.templatePath(f),
+            this.destinationPath(f),
+            this.options.parent.answers
+          );
+      });
       done();
     }
   },
