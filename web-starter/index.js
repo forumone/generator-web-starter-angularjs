@@ -17,6 +17,14 @@ module.exports = generators.Base.extend({
     async : function() {
       ygp(this);
       this.options.addDevDependency(pkg.name, '^' + pkg.version);
+      this.options.addDevDependency('grunt-contrib-compass', '^1.1.1');
+      this.options.addDevDependency('grunt-contrib-copy', '^1.0.0');
+      this.options.addDevDependency('grunt-contrib-watch', '^1.0.0');
+      this.options.addDevDependency('grunt-shell', '^1.3.0');
+      this.options.addDevDependency('grunt-simple-watch', '^0.1.3');
+      this.options.addDevDependency('autoprefixer', '^6.3.4');
+      this.options.addDevDependency('connect-livereload', '^0.5.4');
+      this.options.addDevDependency('grunt-angular-templates', '^1.0.3');
     },
     platform : function() {
       // Set the platform
@@ -32,6 +40,11 @@ module.exports = generators.Base.extend({
         editor.loadNpmTasks('grunt-bower-task');
         this.options.addDevDependency('grunt-bower-task', '^0.4.0');
 
+        var editor = this.options.getPlugin('grunt').getGruntTask('connect');
+        editor.insertConfig('connect', this.fs.read(this.templatePath('tasks/config/connect.js')));
+        editor.loadNpmTasks('grunt-contrib-connect');
+        this.options.addDevDependency('grunt-contrib-connect', '^0.11.2');
+
         var editor = this.options.getPlugin('grunt').getGruntTask('concat');
         editor.insertConfig('concat', this.fs.read(this.templatePath('tasks/config/concat.js')));
         editor.loadNpmTasks('grunt-contrib-concat');
@@ -43,13 +56,13 @@ module.exports = generators.Base.extend({
         this.options.addDevDependency('grunt-html-build', '^0.6.0');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('htmlmin');
-        editor.insertConfig('htmlmin.options', this.fs.read(this.templatePath('tasks/config/htmlmin.js')));
+        editor.insertConfig('htmlmin.myApp', this.fs.read(this.templatePath('tasks/config/htmlmin.js')));
         editor.loadNpmTasks('grunt-contrib-htmlmin');
         this.options.addDevDependency('grunt-contrib-htmlmin', '^1.4.0');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('ngAnnotate');
-        editor.insertConfig('options', this.fs.read(this.templatePath('tasks/config/ng-annotate-options.js')));
-        editor.insertConfig('app', this.fs.read(this.templatePath('tasks/config/ng-annotate.js')));
+        editor.insertConfig('ngAnnotate.options', this.fs.read(this.templatePath('tasks/config/ng-annotate-options.js')));
+        editor.insertConfig('ngAnnotate.app', this.fs.read(this.templatePath('tasks/config/ng-annotate.js')));
         editor.loadNpmTasks('grunt-ng-annotate');
         this.options.addDevDependency('grunt-ng-annotate', '^2.0.2');
 
@@ -61,7 +74,7 @@ module.exports = generators.Base.extend({
         this.options.addDevDependency('grunt-ng-constant', '^2.0.1');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('ngtemplates');
-        editor.insertConfig('ngtemplates', this.fs.read(this.templatePath('tasks/config/ngtemplates.js')));
+        editor.insertConfig('ngtemplates.myApp', this.fs.read(this.templatePath('tasks/config/ngtemplates.js')));
         editor.loadNpmTasks('grunt-angular-templates');
         this.options.addDevDependency('grunt-angular-templates', '^1.0.3');
 
@@ -80,6 +93,9 @@ module.exports = generators.Base.extend({
         this.log('INFO unable to write grunt tasks for AngularJs because Grunt plugin not selected for this project');
       }
       done();
+    },
+    setThemePath : function() {
+      this.options.parent.answers.theme_path = 'src';
     }
   },
   writing : {
@@ -134,15 +150,18 @@ module.exports = generators.Base.extend({
             this.destinationPath('tasks/pipeline.js')
         );
       }
+      done();
+    },
+    grunt : function() {
+      var that = this;
       var files = ['bower.json', 'templates/index.html', 'src/js/states/home/index.html', 'src/js/states/home/index.js'];
       _.map(files, function(f) {
-        this.fs.copyTpl(
-            this.templatePath(f),
-            this.destinationPath(f),
-            this.options.parent.answers
+        that.fs.copyTpl(
+            that.templatePath(f),
+            that.destinationPath(f),
+            that.options.parent.answers
           );
       });
-      done();
     }
   },
   end : {
