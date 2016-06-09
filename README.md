@@ -17,16 +17,18 @@ src
              └── homeRoute.js   // 'home' angular-ui-router state declaration
 templates
  └── index.html //starting point of the angular application
- ```
+```
  
- After the first generation, run: 
+After the first generation, run: 
  
- ```npm install; bower install```
+```npm install; bower install```
  
  
 Run your application:
- 
-```grunt```
+
+```
+grunt
+```
 
 
 Then open your browser on http://localhost:9001/
