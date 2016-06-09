@@ -89,6 +89,11 @@ module.exports = generators.Base.extend({
         editor.insertConfig('js', this.fs.read(this.templatePath('tasks/config/uglify.js')));
         editor.loadNpmTasks('grunt-contrib-uglify');
         this.options.addDevDependency('grunt-contrib-uglify', '^1.0.1');
+
+        var editor = this.options.getPlugin('grunt').getGruntTask('watch');
+        editor.insertConfig('js', this.fs.read(this.templatePath('tasks/config/watch-js.js')));
+        editor.loadNpmTasks('grunt-contrib-uglify');
+        this.options.addDevDependency('grunt-contrib-uglify', '^1.0.1');
       }
       else {
         this.log('INFO unable to write grunt tasks for AngularJs because Grunt plugin not selected for this project');
@@ -155,7 +160,7 @@ module.exports = generators.Base.extend({
     },
     grunt : function() {
       var that = this;
-      var files = ['bower.json', 'templates/index.html', 'src/js/states/home/index.html', 'src/js/states/home/index.js'];
+      var files = ['bower.json', 'templates/index.html', 'src/js/index.js', 'src/js/states/home/home.html', 'src/js/states/home/homeCtrl.js', 'src/js/states/home/homeRoute.js'];
       _.map(files, function(f) {
         that.fs.copyTpl(
             that.templatePath(f),

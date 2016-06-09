@@ -12,8 +12,22 @@ src
      ├── index.js // where the angular-ui-router states are declared
      └── states
          └── home
-             ├── index.html // 'home' template
-             └── index.js   // 'home' controller
+             ├── home.html // 'home' template
+             ├── homeCtrl.js   // 'home' controller
+             └── homeRoute.js   // 'home' angular-ui-router state declaration
 templates
  └── index.html //starting point of the angular application
  ```
+ 
+ After the first generation, run: 
+ 
+ ```npm install; bower install```
+ 
+ 
+Run your application:
+ 
+```grunt```
+
+Then open your browser on http://localhost:9001/
+ 
+ 
