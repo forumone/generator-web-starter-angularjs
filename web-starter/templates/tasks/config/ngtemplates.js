@@ -3,6 +3,6 @@
   src : '**/**.html',
   dest : 'build/js/templates.js',
   options : {
-    htmlmin : '<%= htmlmin.ncqaReportCards %>'
+    htmlmin : '<%= htmlmin.myApp %>'
   }
 }

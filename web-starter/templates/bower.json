@@ -2,9 +2,6 @@
   "name": "<%= name %>",
   "description": "",
   "main": "",
-  "authors": [
-    "William Hurley <whurley@forumone.com>"
-  ],
   "license": "MIT",
   "homepage": "<%= repository %>",
   "moduleType": [],
@@ -17,16 +14,12 @@
     "tests"
   ],
   "dependencies": {
-    "angular-ui-router": "~0.2.18",
-    "lodash": "~4.11.1",
-    "angular-route": "~1.5.0",
-    "angular-aria": "~1.5.0",
-    "angular-sanitize": "~1.5.0",
-    "angular-resource": "~1.5.0",
-    "singularity": "~1.6.2",
-    "jquery": "^2.2.3",
-    "jquery-hoverintent": "jquery-hoverIntent#^1.8.1",
-    "wow": "^1.1.2"
+    "angular-ui-router": "~0.3.0",
+    "lodash": "~4.13.1",
+    "angular-route": "~1.5.6",
+    "angular-aria": "~1.5.6",
+    "angular-sanitize": "~1.5.6",
+    "jquery": "^2.2.3"
   },
   "exportsOverride": {
     "lodash": {
