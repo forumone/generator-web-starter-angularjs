@@ -80,6 +80,9 @@ module.exports = generators.Base.extend({
         this.log('INFO unable to write grunt tasks for AngularJs because Grunt plugin not selected for this project');
       }
       done();
+    },
+    setThemePath : function() {
+      this.options.parent.answers.build_path = 'src/build';
     }
   },
   writing : {
