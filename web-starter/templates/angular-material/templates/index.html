@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=UTF8">
+    <title><%= name %></title>
+    <meta name="description" content="<%= name %>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=yes" />
+    <!-- build:style bundle --><!-- /build -->
+    <!-- build:script bundle --><!-- /build -->
+    <style>
+      .layout-xs-column { height: 100%; } // fix bug angular-material 1.0.9
+    </style>
+  </head>
+  <body ng-app="myApp" ng-cloak layout="row">
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" layout="column" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+      <md-toolbar class="md-hue-2" layout-align="center center">
+        <div><%= name %></div>
+      </md-toolbar>
+      <md-list>
+        <md-list-item ui-sref="home">
+          <div class="inset">
+            <ng-md-icon icon="apps"></ng-md-icon>
+          </div>
+          <p flex="initial"> Dashboard </p>
+        </md-list-item>
+        <md-divider></md-divider>
+      </md-list>
+    </md-sidenav>
+    <div flex layout="column">
+      <md-toolbar>
+        <div ng-controller="LayoutController" ng-cloak>
+          <div class="md-toolbar-tools">
+            <md-button ng-click="toggleSidenav('left')" hide-gt-sm aria-label="Menu">
+              <ng-md-icon icon="menu"></ng-md-icon>
+            </md-button>
+            <h3 hide-gt-sm aria-label="Menu"><%= name %></h3>
+            <span flex></span>
+            <md-menu>
+              <md-button aria-label="Open Settings" ng-click="openMenu($mdOpenMenu, $event)">
+                <ng-md-icon icon="more_vert"></md-icon>
+              </md-button>
+              <md-menu-content width="4">
+                <md-menu-item>
+                  <md-button ng-click="layout.changeProfile($event)"><ng-md-icon icon="face"></ng-md-icon> Profile</md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="layout.changePassword()"><ng-md-icon icon="lock"></ng-md-icon> Password</md-button>
+                </md-menu-item>
+                <md-menu-divider></md-menu-divider>
+                <md-menu-item>
+                  <md-button ng-click="layout.logOut()"><ng-md-icon icon="power_settings_new"></ng-md-icon> Logout</md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
+       </div>
+      </md-toolbar>
+      <ui-view></ui-view>
+    </div>
+  </body>
+</html>
