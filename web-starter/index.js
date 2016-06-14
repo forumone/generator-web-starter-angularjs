@@ -31,6 +31,47 @@ module.exports = generators.Base.extend({
       this.options.parent.answers.platform = 'angularjs';
     }
   },
+  prompting : {
+    plugins : function() {
+      var done = this.async();
+      var that = this;
+      var config = _.extend({
+        material : true,
+        ngCookies : true,
+        ngAnimate : false,
+        ngSanitize : false
+      }, this.config.getAll());
+
+      return this.prompt([{
+        type    : 'confirm',
+        name    : 'material',
+        message : 'Do you want to use angular-material',
+        default : config.material
+      },
+      {
+        type    : 'confirm',
+        name    : 'ngCookies',
+        message : 'Do you want to use ngCookies',
+        default : config.ngCookies
+      },
+      {
+        type    : 'confirm',
+        name    : 'ngAnimate',
+        message : 'Do you want to use ngAnimate',
+        default : config.ngAnimate
+      },
+      {
+        type    : 'confirm',
+        name    : 'ngSanitize',
+        message : 'Do you want to use ngSanitize',
+        default : config.ngSanitize
+      }]).then(function (answers) {
+        this.config.set(answers);
+        this.answers = _.extend(config, answers);
+        done();
+      }.bind(this));
+    }
+  },
   configuring : {
     addGruntTasks : function() {
       var done = this.async();
@@ -159,7 +200,7 @@ module.exports = generators.Base.extend({
       }
       done();
     },
-    grunt : function() {
+    angular: function() {
       var that = this;
       var files = ['bower.json', 'templates/index.html', 'src/js/index.js', 'src/js/states/home/home.html', 'src/js/states/home/homeCtrl.js', 'src/js/states/home/homeRoute.js'];
       _.map(files, function(f) {
@@ -169,11 +210,26 @@ module.exports = generators.Base.extend({
             that.options.parent.answers
           );
       });
+    },
+    angularMaterial: function() {
+      if(this.answers.material) {
+        var that = this;
+        var files = ['angular-material/templates/index.html', 'angular-material/src/js/states/home/home.html', 'angular-material/src/js/states/layout/layoutCtrl.js'];
+        _.map(files, function(f) {
+          that.fs.copyTpl(
+              that.templatePath(f),
+              _.replace(that.destinationPath(f), 'angular-material/', ''),
+              that.options.parent.answers,
+              {force: true}
+            );
+        });
+      }
     }
   },
-  end : {
-    ncu : function() {
-      this.log(yosay("Run 'ncu -u' to update your package.json"));
-    }
+  install: function () {
+    this.installDependencies({
+      skipInstall: this.options['skip-install'],
+      bower: true
+    });
   }
 });
