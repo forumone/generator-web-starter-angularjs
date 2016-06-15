@@ -1,1 +1,2 @@
-var app = angular.module('myApp', [ 'ngRoute', 'ui.router', 'config']);
+angular.module('myApp', <%- JSON.stringify(modules) %>);
+

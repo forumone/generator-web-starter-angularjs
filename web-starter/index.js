@@ -68,6 +68,7 @@ module.exports = generators.Base.extend({
       }]).then(function (answers) {
         this.config.set(answers);
         this.answers = _.extend(config, answers);
+        _.extend(this.options.parent.answers, { 'web-starter-angularjs' : answers });
         done();
       }.bind(this));
     }
@@ -132,7 +133,7 @@ module.exports = generators.Base.extend({
         this.options.addDevDependency('grunt-contrib-uglify', '^1.0.1');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('watch');
-        editor.insertConfig('js', this.fs.read(this.templatePath('tasks/config/watch-js.js')));
+        editor.insertConfig('watch.js', this.fs.read(this.templatePath('tasks/config/watch-js.js')));
         editor.loadNpmTasks('grunt-contrib-uglify');
         this.options.addDevDependency('grunt-contrib-uglify', '^1.0.1');
       }
@@ -179,12 +180,19 @@ module.exports = generators.Base.extend({
           priority : 1
         },
         {
-          task : 'sync:build',
+          task : 'compileScripts',
           priority : 2
+        },
+        {
+          task : 'sync:vendor',
+          priority : 3
+        },
+        {
+          task : 'sync:build',
+          priority : 4
         }]);
         var gruntEditor = this.options.getPlugin('grunt').registerTask('compileScripts', [{
           task : 'ngtemplates',
-          priority : 1
         },
         {
           task : 'ngAnnotate',
@@ -193,16 +201,31 @@ module.exports = generators.Base.extend({
         // useful if you want to add ngconstant
         gruntEditor.prependJavaScript("var env = process.env.NODE_ENV || 'development';");
 
-        this.fs.copy(
-            this.templatePath('tasks/pipeline.js'),
-            this.destinationPath('tasks/pipeline.js')
-        );
       }
       done();
     },
+    pipeline: function() {
+      this.fs.copy(
+          this.templatePath('tasks/pipeline.js'),
+          this.destinationPath('tasks/pipeline.js')
+      );
+    },
+    angularJson: function() {
+      var options = {};
+      options.modules = ['ngRoute', 'ui.router'];
+      if (this.answers.material) {
+        options.modules.push('ngMaterial');
+        options.modules.push('ngMdIcons');
+      }
+      this.fs.copyTpl(
+        this.templatePath('src/js/index.js'),
+        this.destinationPath('src/js/index.js'),
+        options
+      );
+    },
     angular: function() {
       var that = this;
-      var files = ['bower.json', 'templates/index.html', 'src/js/index.js', 'src/js/states/home/home.html', 'src/js/states/home/homeCtrl.js', 'src/js/states/home/homeRoute.js'];
+      var files = ['bower.json', 'templates/index.html', 'src/js/states/home/home.html', 'src/js/states/home/homeCtrl.js', 'src/js/states/home/homeRoute.js'];
       _.map(files, function(f) {
         that.fs.copyTpl(
             that.templatePath(f),
