@@ -16,15 +16,7 @@ module.exports = generators.Base.extend({
   initializing : {
     async : function() {
       ygp(this);
-      this.options.addDevDependency(pkg.name, '^' + pkg.version);
-      this.options.addDevDependency('grunt-contrib-compass', '^1.1.1');
-      this.options.addDevDependency('grunt-contrib-copy', '^1.0.0');
-      this.options.addDevDependency('grunt-contrib-watch', '^1.0.0');
-      this.options.addDevDependency('grunt-shell', '^1.3.0');
-      this.options.addDevDependency('grunt-simple-watch', '^0.1.3');
-      this.options.addDevDependency('autoprefixer', '^6.3.4');
-      this.options.addDevDependency('connect-livereload', '^0.5.4');
-      this.options.addDevDependency('grunt-angular-templates', '^1.0.3');
+      this.options.addDevDependency(pkg.name, '~' + pkg.version);
     },
     platform : function() {
       // Set the platform
@@ -136,6 +128,12 @@ module.exports = generators.Base.extend({
         editor.insertConfig('watch.js', this.fs.read(this.templatePath('tasks/config/watch-js.js')));
         editor.loadNpmTasks('grunt-contrib-uglify');
         this.options.addDevDependency('grunt-contrib-uglify', '^1.0.1');
+        
+        this.options.addDevDependency('grunt-contrib-copy', '^1.0.0');
+        this.options.addDevDependency('grunt-contrib-watch', '^1.0.0');
+        this.options.addDevDependency('grunt-simple-watch', '^0.1.3');
+        this.options.addDevDependency('connect-livereload', '^0.5.4');
+        this.options.addDevDependency('grunt-angular-templates', '^1.0.3');
       }
       else {
         this.log('INFO unable to write grunt tasks for AngularJs because Grunt plugin not selected for this project');
