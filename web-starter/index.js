@@ -101,9 +101,9 @@ module.exports = generators.Base.extend({
         this.options.addDevDependency('grunt-ng-annotate', '^2.0.2');
 
         var editor = this.options.getPlugin('grunt').getGruntTask('ngconstant');
-        editor.insertConfig('development', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
-        editor.insertConfig('staging', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
-        editor.insertConfig('production', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
+        editor.insertConfig('ngconstant.development', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
+        editor.insertConfig('ngconstant.staging', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
+        editor.insertConfig('ngconstant.production', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
         editor.loadNpmTasks('grunt-ng-constant');
         this.options.addDevDependency('grunt-ng-constant', '^2.0.1');
 
