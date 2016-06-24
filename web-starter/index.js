@@ -204,12 +204,14 @@ module.exports = generators.Base.extend({
       );
     },
     angularJson: function() {
+      var that = this;
       var options = {};
       options.modules = ['ngRoute', 'ui.router'];
       _.map(this.answers.modules, function(e) {
         if(e==='angular') {
           options.modules.push('ngMaterial');
           options.modules.push('ngMdIcons');
+          that.answers.material = true;
         }
         else {
           options.modules.push(e);
