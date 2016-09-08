@@ -23,70 +23,107 @@ module.exports = generators.Base.extend({
       this.options.parent.answers.platform = 'angularjs';
     }
   },
+  prompting : {
+    plugins : function() {
+      var done = this.async();
+      var that = this;
+      var config = _.extend({
+        modules: [{
+            name:'angular',
+            value:'angular',
+            checked:'true'
+          },{
+            name:'ngCookies',
+            value:'ngCookie'
+          },{
+            name:'ngAnimate',
+            value:'ngAnimate',
+            checked:'true'
+          },{
+            name:'ngSanitize',
+            value:'ngSanitize',
+            checked:'true'
+          }
+      ]}, this.config.getAll());
+
+      return this.prompt([{
+        type    : 'checkbox',
+        name    : 'modules',
+        message : 'Select modules',
+        choices : config.modules
+      }]).then(function (answers) {
+        this.config.set(answers);
+        this.answers = _.extend(config, answers);
+        _.extend(this.options.parent.answers, { 'web-starter-angularjs' : answers });
+        done();
+      }.bind(this));
+    }
+  },
   configuring : {
     addGruntTasks : function() {
       var done = this.async();
       if (typeof this.options.getPlugin === "function" && this.options.getPlugin('grunt')) {
-        var editor = this.options.getPlugin('grunt').getGruntTask('bower');
+        var editor;
+        editor = this.options.getPlugin('grunt').getGruntTask('bower');
         editor.insertConfig('bower.install', this.fs.read(this.templatePath('tasks/config/bower.js')));
         editor.loadNpmTasks('grunt-bower-task');
         this.options.addDevDependency('grunt-bower-task', '^0.4.0');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('connect');
+        editor = this.options.getPlugin('grunt').getGruntTask('connect');
         editor.insertConfig('connect', this.fs.read(this.templatePath('tasks/config/connect.js')));
         editor.loadNpmTasks('grunt-contrib-connect');
         this.options.addDevDependency('grunt-contrib-connect', '^0.11.2');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('concat');
+        editor = this.options.getPlugin('grunt').getGruntTask('concat');
         editor.insertConfig('concat', this.fs.read(this.templatePath('tasks/config/concat.js')));
         editor.loadNpmTasks('grunt-contrib-concat');
         this.options.addDevDependency('grunt-contrib-concat', '^1.0.0');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('htmlbuild');
+        editor = this.options.getPlugin('grunt').getGruntTask('htmlbuild');
         editor.insertConfig('htmlbuild.dev', this.fs.read(this.templatePath('tasks/config/htmlbuild.js')));
         editor.loadNpmTasks('grunt-html-build');
         this.options.addDevDependency('grunt-html-build', '^0.6.0');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('htmlmin');
+        editor = this.options.getPlugin('grunt').getGruntTask('htmlmin');
         editor.insertConfig('htmlmin.myApp', this.fs.read(this.templatePath('tasks/config/htmlmin.js')));
         editor.loadNpmTasks('grunt-contrib-htmlmin');
         this.options.addDevDependency('grunt-contrib-htmlmin', '^1.4.0');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('ngAnnotate');
+        editor = this.options.getPlugin('grunt').getGruntTask('ngAnnotate');
         editor.insertConfig('ngAnnotate.options', this.fs.read(this.templatePath('tasks/config/ng-annotate-options.js')));
         editor.insertConfig('ngAnnotate.app', this.fs.read(this.templatePath('tasks/config/ng-annotate.js')));
         editor.loadNpmTasks('grunt-ng-annotate');
         this.options.addDevDependency('grunt-ng-annotate', '^2.0.2');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('ngconstant');
-        editor.insertConfig('development', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
-        editor.insertConfig('staging', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
-        editor.insertConfig('production', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
+        editor = this.options.getPlugin('grunt').getGruntTask('ngconstant');
+        editor.insertConfig('ngconstant.development', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
+        editor.insertConfig('ngconstant.staging', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
+        editor.insertConfig('ngconstant.production', this.fs.read(this.templatePath('tasks/config/ngconstant.js')));
         editor.loadNpmTasks('grunt-ng-constant');
         this.options.addDevDependency('grunt-ng-constant', '^2.0.1');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('ngtemplates');
+        editor = this.options.getPlugin('grunt').getGruntTask('ngtemplates');
         editor.insertConfig('ngtemplates.myApp', this.fs.read(this.templatePath('tasks/config/ngtemplates.js')));
         editor.loadNpmTasks('grunt-angular-templates');
         this.options.addDevDependency('grunt-angular-templates', '^1.0.3');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('sync');
+        editor = this.options.getPlugin('grunt').getGruntTask('sync');
         editor.insertConfig('sync.build', this.fs.read(this.templatePath('tasks/config/sync-build.js')));
         editor.insertConfig('sync.vendor', this.fs.read(this.templatePath('tasks/config/sync-vendor.js')));
         editor.insertConfig('sync.source', this.fs.read(this.templatePath('tasks/config/sync-source.js')));
         editor.loadNpmTasks('grunt-sync');
         this.options.addDevDependency('grunt-sync', '^0.5.2');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('uglify');
+        editor = this.options.getPlugin('grunt').getGruntTask('uglify');
         editor.insertConfig('js', this.fs.read(this.templatePath('tasks/config/uglify.js')));
         editor.loadNpmTasks('grunt-contrib-uglify');
         this.options.addDevDependency('grunt-contrib-uglify', '^1.0.1');
 
-        var editor = this.options.getPlugin('grunt').getGruntTask('watch');
-        editor.insertConfig('js', this.fs.read(this.templatePath('tasks/config/watch-js.js')));
+        editor = this.options.getPlugin('grunt').getGruntTask('watch');
+        editor.insertConfig('watch.js', this.fs.read(this.templatePath('tasks/config/watch-js.js')));
         editor.loadNpmTasks('grunt-contrib-uglify');
         this.options.addDevDependency('grunt-contrib-uglify', '^1.0.1');
-        
+
         this.options.addDevDependency('grunt-contrib-copy', '^1.0.0');
         this.options.addDevDependency('grunt-contrib-watch', '^1.0.0');
         this.options.addDevDependency('grunt-simple-watch', '^0.1.3');
@@ -136,12 +173,19 @@ module.exports = generators.Base.extend({
           priority : 1
         },
         {
-          task : 'sync:build',
+          task : 'compileScripts',
           priority : 2
+        },
+        {
+          task : 'sync:vendor',
+          priority : 3
+        },
+        {
+          task : 'sync:build',
+          priority : 4
         }]);
         var gruntEditor = this.options.getPlugin('grunt').registerTask('compileScripts', [{
           task : 'ngtemplates',
-          priority : 1
         },
         {
           task : 'ngAnnotate',
@@ -150,16 +194,39 @@ module.exports = generators.Base.extend({
         // useful if you want to add ngconstant
         gruntEditor.prependJavaScript("var env = process.env.NODE_ENV || 'development';");
 
-        this.fs.copy(
-            this.templatePath('tasks/pipeline.js'),
-            this.destinationPath('tasks/pipeline.js')
-        );
       }
       done();
     },
-    grunt : function() {
+    pipeline: function() {
+      this.fs.copy(
+          this.templatePath('tasks/pipeline.js'),
+          this.destinationPath('tasks/pipeline.js')
+      );
+    },
+    angularJson: function() {
       var that = this;
-      var files = ['bower.json', 'templates/index.html', 'src/js/index.js', 'src/js/states/home/home.html', 'src/js/states/home/homeCtrl.js', 'src/js/states/home/homeRoute.js'];
+      var options = {};
+      options.modules = ['ngRoute', 'ui.router'];
+      _.map(this.answers.modules, function(e) {
+        if(e==='angular') {
+          options.modules.push('ngMaterial');
+          options.modules.push('ngMdIcons');
+          that.answers.material = true;
+        }
+        else {
+          options.modules.push(e);
+        }
+      });
+
+      this.fs.copyTpl(
+        this.templatePath('src/js/index.js'),
+        this.destinationPath('src/js/index.js'),
+        options
+      );
+    },
+    angular: function() {
+      var that = this;
+      var files = ['bower.json', 'templates/index.html', 'src/js/states/home/home.html', 'src/js/states/home/homeCtrl.js', 'src/js/states/home/homeRoute.js'];
       _.map(files, function(f) {
         that.fs.copyTpl(
             that.templatePath(f),
@@ -167,11 +234,26 @@ module.exports = generators.Base.extend({
             that.options.parent.answers
           );
       });
+    },
+    angularMaterial: function() {
+      if(this.answers.material) {
+        var that = this;
+        var files = ['angular-material/templates/index.html', 'angular-material/src/js/states/home/home.html', 'angular-material/src/js/states/layout/layoutCtrl.js'];
+        _.map(files, function(f) {
+          that.fs.copyTpl(
+              that.templatePath(f),
+              _.replace(that.destinationPath(f), 'angular-material/', ''),
+              that.options.parent.answers,
+              {force: true}
+            );
+        });
+      }
     }
   },
-  end : {
-    ncu : function() {
-      this.log(yosay("Run 'ncu -u' to update your package.json"));
-    }
+  install: function () {
+    this.installDependencies({
+      skipInstall: this.options['skip-install'],
+      bower: true
+    });
   }
 });
